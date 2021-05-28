@@ -2,8 +2,9 @@ package com.company;
 
 import com.company.Classes.Agenda;
 import com.company.Classes.Contato;
+import com.company.database.ConnectDB;
 
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,11 +12,13 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
+		ConnectDB.initDB();
 		Agenda agenda = new Agenda();
+		Scanner input = new Scanner(System.in);
 		List<Contato> contatosSelecionados = new ArrayList<>();
 		int opcao = 9999999;
 	    while (opcao != 0) {
+			System.out.println("\n\n\n\n\n\n\n\n");
 			System.out.println("Escolha uma opcao");
 			System.out.println("1. Inserir um Contato");
 			System.out.println("2. Buscar contato pelo nome e seleciona-lo");
@@ -56,6 +59,7 @@ public class Main {
 		String email = input.nextLine();
 
 		agenda.inserir(nome, numero, email);
+
 	}
 
 	private static List<Contato> buscarContatoNome(Agenda agenda) {

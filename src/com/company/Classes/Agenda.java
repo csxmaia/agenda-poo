@@ -1,5 +1,11 @@
 package com.company.Classes;
 
+import com.company.database.ConnectDB;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,40 +48,110 @@ public class Agenda {
         contato.setNumero(numero);
         contato.setEmail(email);
 
-        List<Contato> contatos = this.contatos;
-        contatos.add(contato);
-        this.contatos = contatos;
+        try {
+            Connection con = ConnectDB.getDB();
+            Statement statement = con.createStatement();
+
+            String sql = "INSERT INTO contato(nome, numero, email, agenda_id) VALUES (\"" +nome+ "\",\"" +numero+ "\", \"" +email+ "\", " +1+ ");";
+
+            statement.execute(sql);
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Contato> buscarPorNome(String nome) {
-        List<Contato> contatosNome = new ArrayList<>();
-        contatosNome = this.contatos.stream()
-                .filter(contato -> contato.getNome().equals(nome))
-                .collect(Collectors.toList());
-        return contatosNome;
+        List<Contato> contatoList = new ArrayList<>();
+
+        try {
+            Connection con = ConnectDB.getDB();
+            Statement statement = con.createStatement();
+
+            String sql = "SELECT * FROM contato WHERE nome LIKE \"%"+ nome +"%\";";
+
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                factoryContato(result, contatoList);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contatoList;
     }
 
     public List<Contato> buscarPorNumero(String numero) {
-        List<Contato> contatosNumero = new ArrayList<>();
-        contatosNumero = this.contatos.stream()
-                .filter(contato -> contato.getNumero().equals(numero))
-                .collect(Collectors.toList());
-        return contatosNumero;
+        List<Contato> contatoList = new ArrayList<>();
+
+        try {
+            Connection con = ConnectDB.getDB();
+            Statement statement = con.createStatement();
+
+            String sql = "SELECT * FROM contato WHERE numero LIKE \"%"+ numero +"%\";";
+
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                factoryContato(result, contatoList);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contatoList;
     }
 
     public List<Contato> buscarPorEmail(String email) {
-        List<Contato> contatosEmail = new ArrayList<>();
-        contatosEmail = this.contatos.stream()
-                .filter(contato -> contato.getEmail().equals(email))
-                .collect(Collectors.toList());
-        return contatosEmail;
+        List<Contato> contatoList = new ArrayList<>();
+
+        try {
+            Connection con = ConnectDB.getDB();
+            Statement statement = con.createStatement();
+
+            String sql = "SELECT * FROM contato WHERE email LIKE \"%"+ email +"%\";";
+
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                factoryContato(result, contatoList);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contatoList;
     }
 
     public void remover(Contato contato) {
-        this.contatos.remove(contato);
+        try {
+            Connection con = ConnectDB.getDB();
+            Statement statement = con.createStatement();
+
+            String sql = "DELETE FROM contato WHERE id = " + contato.getId() + ";";
+
+            statement.execute(sql);
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Contato> getContatos() {
         return contatos;
+    }
+
+    private void factoryContato(ResultSet result, List<Contato> contatoList) throws SQLException {
+        Contato contato = new Contato();
+        contato.setId(result.getInt("id"));
+        contato.setNome(result.getString("nome"));
+        contato.setNumero(result.getString("numero"));
+        contato.setEmail(result.getString("email"));
+        contatoList.add(contato);
     }
 }

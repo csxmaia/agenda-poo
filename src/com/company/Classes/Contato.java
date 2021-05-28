@@ -1,14 +1,15 @@
 package com.company.Classes;
 
 public class Contato {
+    private int id;
     private String nome;
     private String numero;
     private String email;
 
-    public Contato() {
+    public Contato() {}
 
-    }
-
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public String getNumero() {
         return numero;
     }
