@@ -17,11 +17,11 @@ public class Main {
 	    Contato contato2 = new Contato();
 	    contato2.setNome("Contato2");
 	    contato2.setNumero("numero2");
-	    contato2.setEmail("email2");
+	    contato2.setEmail("email2@email.com");
 	    Contato contato3 = new Contato();
 	    contato3.setNome("Contato3");
 	    contato3.setNumero("numero3");
-	    contato3.setEmail("email3");
+	    contato3.setEmail("email3@email.com");
 
 	    agenda.inserir(contato1.getNome(), contato1.getNumero(), contato1.getEmail());
 	    agenda.inserir(contato2.getNome(), contato2.getNumero(), contato2.getEmail());
